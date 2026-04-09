@@ -1,0 +1,107 @@
+import { useState } from 'react';
+import type { FormEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
+import { InlineError } from '../components/ui/InlineError';
+import { useToast } from '../components/ui/useToast';
+import { getAuthErrorMessage } from '../features/auth/auth.api';
+import { registerFormSchema } from '../features/auth/auth.validation';
+import { useAuth } from '../features/auth/useAuth';
+
+export const RegisterPage = () => {
+  const navigate = useNavigate();
+  const { register, isSubmitting } = useAuth();
+  const { showToast } = useToast();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setErrorMessage(null);
+
+    const parsed = registerFormSchema.safeParse({ email, password });
+
+    if (!parsed.success) {
+      setErrorMessage(parsed.error.issues[0]?.message ?? 'Please check your form input.');
+      return;
+    }
+
+    try {
+      await register(parsed.data);
+      showToast({
+        title: 'Account created',
+        message: 'Your account is ready to use.',
+        variant: 'success',
+      });
+      navigate('/', { replace: true });
+    } catch (error) {
+      setErrorMessage(getAuthErrorMessage(error));
+      showToast({
+        title: 'Registration failed',
+        message: getAuthErrorMessage(error),
+        variant: 'error',
+      });
+    }
+  };
+
+  return (
+    <section className="mx-auto max-w-md rounded-2xl border border-slate-200 bg-white/95 p-6 shadow-sm">
+      <h2 className="text-xl font-semibold text-slate-900">Create Account</h2>
+      <p className="mt-2 text-sm text-slate-600">
+        Sign up with your email and password to start tracking applications.
+      </p>
+
+      <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="register-email" className="mb-1 block text-sm text-slate-700">
+            Email
+          </label>
+          <input
+            id="register-email"
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-amber-500"
+            placeholder="name@company.com"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="register-password" className="mb-1 block text-sm text-slate-700">
+            Password
+          </label>
+          <input
+            id="register-password"
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+            minLength={8}
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-amber-500"
+            placeholder="Minimum 8 characters"
+          />
+        </div>
+
+        {errorMessage ? <InlineError message={errorMessage} /> : null}
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {isSubmitting ? 'Creating account...' : 'Register'}
+        </button>
+      </form>
+
+      <p className="mt-4 text-sm text-slate-600">
+        Already have an account?{' '}
+        <Link to="/login" className="font-medium text-slate-900 underline">
+          Sign in
+        </Link>
+      </p>
+    </section>
+  );
+};
