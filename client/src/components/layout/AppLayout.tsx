@@ -1,12 +1,42 @@
+import { useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 
 import { useToast } from '../ui/useToast';
 import { useAuth } from '../../features/auth/useAuth';
 
+type ThemeMode = 'light' | 'dark';
+
+const THEME_STORAGE_KEY = 'job-tracker-theme';
+
+const getInitialThemeMode = (): ThemeMode => {
+  if (typeof window === 'undefined') {
+    return 'light';
+  }
+
+  const saved = window.localStorage.getItem(THEME_STORAGE_KEY);
+
+  if (saved === 'light' || saved === 'dark') {
+    return saved;
+  }
+
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+};
+
 export const AppLayout = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated, logout, isSubmitting } = useAuth();
   const { showToast } = useToast();
+  const [themeMode, setThemeMode] = useState<ThemeMode>(() => getInitialThemeMode());
+
+  useEffect(() => {
+    const root = document.documentElement;
+
+    root.classList.toggle('theme-dark', themeMode === 'dark');
+    root.classList.toggle('theme-light', themeMode === 'light');
+    root.setAttribute('data-theme', themeMode);
+
+    window.localStorage.setItem(THEME_STORAGE_KEY, themeMode);
+  }, [themeMode]);
 
   const handleLogout = async () => {
     try {
@@ -26,6 +56,10 @@ export const AppLayout = () => {
     }
   };
 
+  const toggleThemeMode = () => {
+    setThemeMode((current) => (current === 'light' ? 'dark' : 'light'));
+  };
+
   return (
     <div className="mx-auto min-h-screen max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
       <header className="mb-10 rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm backdrop-blur">
@@ -43,6 +77,14 @@ export const AppLayout = () => {
           </div>
 
           <nav className="flex items-center gap-2 rounded-xl bg-slate-100 p-1">
+            <button
+              type="button"
+              onClick={toggleThemeMode}
+              className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-white"
+            >
+              {themeMode === 'dark' ? 'Light Mode' : 'Dark Mode'}
+            </button>
+
             {isAuthenticated ? (
               <>
                 <Link

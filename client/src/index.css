@@ -6,6 +6,7 @@
   font-family: 'IBM Plex Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #13223d;
   background-color: #eef3f7;
+  color-scheme: light;
 }
 
 * {
@@ -23,4 +24,59 @@ body {
 
 #root {
   min-height: 100vh;
+}
+
+:root.theme-dark {
+  color: #e2e8f0;
+  background-color: #0b1220;
+  color-scheme: dark;
+}
+
+:root.theme-dark body {
+  background:
+    radial-gradient(circle at 10% 15%, #21314f 0%, transparent 42%),
+    radial-gradient(circle at 88% 10%, #25343d 0%, transparent 45%),
+    linear-gradient(170deg, #0f172a 0%, #111827 100%);
+}
+
+:root.theme-dark .bg-white,
+:root.theme-dark .bg-white\/80,
+:root.theme-dark .bg-white\/90,
+:root.theme-dark .bg-white\/95,
+:root.theme-dark .bg-slate-50,
+:root.theme-dark .bg-slate-100 {
+  background-color: #0f172a !important;
+}
+
+:root.theme-dark .text-slate-900 {
+  color: #f8fafc !important;
+}
+
+:root.theme-dark .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+:root.theme-dark .text-slate-600,
+:root.theme-dark .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+:root.theme-dark .text-amber-700 {
+  color: #fbbf24 !important;
+}
+
+:root.theme-dark .border-slate-200,
+:root.theme-dark .border-slate-200\/80,
+:root.theme-dark .border-slate-300 {
+  border-color: #334155 !important;
+}
+
+:root.theme-dark .hover\:bg-white:hover,
+:root.theme-dark .hover\:bg-slate-50:hover {
+  background-color: #1e293b !important;
+}
+
+:root.theme-dark .focus\:border-amber-500:focus,
+:root.theme-dark .focus\:border-amber-500:focus-visible {
+  border-color: #f59e0b !important;
 }
