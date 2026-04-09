@@ -3,6 +3,7 @@ import type { FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { InlineError } from '../components/ui/InlineError';
+import { FormField } from '../components/ui/FormField';
 import { useToast } from '../components/ui/useToast';
 import { getAuthErrorMessage } from '../features/auth/auth.api';
 import { loginFormSchema } from '../features/auth/auth.validation';
@@ -54,10 +55,7 @@ export const LoginPage = () => {
       </p>
 
       <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="login-email" className="mb-1 block text-sm text-slate-700">
-            Email
-          </label>
+        <FormField label="Email" htmlFor="login-email">
           <input
             id="login-email"
             type="email"
@@ -67,22 +65,24 @@ export const LoginPage = () => {
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-amber-500"
             placeholder="name@company.com"
           />
-        </div>
+        </FormField>
 
-        <div>
-          <label htmlFor="login-password" className="mb-1 block text-sm text-slate-700">
-            Password
-          </label>
+        <FormField
+          label="Password"
+          htmlFor="login-password"
+          helperText="Minimum 8 characters"
+        >
           <input
             id="login-password"
             type="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
+            minLength={8}
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-amber-500"
             placeholder="********"
           />
-        </div>
+        </FormField>
 
         {errorMessage ? <InlineError message={errorMessage} /> : null}
 

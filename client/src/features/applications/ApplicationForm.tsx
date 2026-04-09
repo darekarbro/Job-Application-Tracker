@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 
+import { FormField } from '../../components/ui/FormField';
 import { InlineError } from '../../components/ui/InlineError';
 import type { ParsedJobDescription } from '../ai/ai.types';
 import {
@@ -259,10 +260,7 @@ export const ApplicationForm = ({
       </div>
 
       <form className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2" onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="company" className="mb-1 block text-sm text-slate-700">
-            Company
-          </label>
+        <FormField label="Company" htmlFor="company">
           <input
             id="company"
             value={formValues.company}
@@ -270,12 +268,9 @@ export const ApplicationForm = ({
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-amber-500"
             placeholder="Acme Corp"
           />
-        </div>
+        </FormField>
 
-        <div>
-          <label htmlFor="role" className="mb-1 block text-sm text-slate-700">
-            Role
-          </label>
+        <FormField label="Role" htmlFor="role">
           <input
             id="role"
             value={formValues.role}
@@ -283,12 +278,9 @@ export const ApplicationForm = ({
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-amber-500"
             placeholder="Frontend Engineer"
           />
-        </div>
+        </FormField>
 
-        <div>
-          <label htmlFor="dateApplied" className="mb-1 block text-sm text-slate-700">
-            Date Applied
-          </label>
+        <FormField label="Date Applied" htmlFor="dateApplied">
           <input
             id="dateApplied"
             type="date"
@@ -296,12 +288,9 @@ export const ApplicationForm = ({
             onChange={(event) => updateField('dateApplied', event.target.value)}
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-amber-500"
           />
-        </div>
+        </FormField>
 
-        <div>
-          <label htmlFor="status" className="mb-1 block text-sm text-slate-700">
-            Status
-          </label>
+        <FormField label="Status" htmlFor="status">
           <select
             id="status"
             value={formValues.status}
@@ -316,7 +305,7 @@ export const ApplicationForm = ({
               </option>
             ))}
           </select>
-        </div>
+        </FormField>
 
         <div>
           <label htmlFor="salaryRange" className="mb-1 block text-sm text-slate-700">

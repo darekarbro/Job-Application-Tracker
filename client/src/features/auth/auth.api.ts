@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { httpClient } from '../../services/http';
 import type { ApiResponse } from '../../types/api';
+import { getApiErrorMessage } from '../../utils/api-error';
 import type { AuthPayload, LoginInput, RegisterInput } from './auth.types';
 
 const AUTH_ENDPOINT = '/auth';
@@ -49,14 +50,5 @@ export const logoutUser = async (): Promise<void> => {
 };
 
 export const getAuthErrorMessage = (error: unknown): string => {
-  if (axios.isAxiosError(error)) {
-    const message =
-      (error.response?.data as { message?: string } | undefined)?.message;
-
-    if (typeof message === 'string' && message.trim().length > 0) {
-      return message;
-    }
-  }
-
-  return 'Something went wrong. Please try again.';
+  return getApiErrorMessage(error, 'Something went wrong. Please try again.');
 };

@@ -1,7 +1,6 @@
-import axios from 'axios';
-
 import { httpClient } from '../../services/http';
 import type { ApiResponse } from '../../types/api';
+import { getApiErrorMessage } from '../../utils/api-error';
 import type {
   CreateApplicationInput,
   JobApplication,
@@ -50,14 +49,5 @@ export const deleteApplication = async (id: string): Promise<void> => {
 };
 
 export const getApplicationErrorMessage = (error: unknown): string => {
-  if (axios.isAxiosError(error)) {
-    const message =
-      (error.response?.data as { message?: string } | undefined)?.message;
-
-    if (typeof message === 'string' && message.trim().length > 0) {
-      return message;
-    }
-  }
-
-  return 'Unable to process application request right now.';
+  return getApiErrorMessage(error, 'Unable to process application request right now.');
 };
