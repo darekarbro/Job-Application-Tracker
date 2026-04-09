@@ -88,6 +88,15 @@ Per-workspace:
 | Variable | Required | Description | Example |
 | --- | --- | --- | --- |
 | VITE_API_URL | Yes | Base URL for frontend API calls | http://localhost:5000/api |
+| VITE_BYPASS_AUTH | No | Development-only auth bypass for viewing protected pages without login | false |
+
+To view protected pages without logging in during local development, set:
+
+```env
+VITE_BYPASS_AUTH=true
+```
+
+Important: keep this value false in production.
 
 ### Server (server/.env)
 
